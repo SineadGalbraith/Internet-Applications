@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>assignment1</title>
+  </head>
+  <body>
+    <div id="app">
+      <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+      <input placeholder="Search Location" v-model="location"><br>
+      <button v-on:click="GetTheWeather">Get Weather</button>
+    </div>
+  </body>
+  <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          location : '' 
+        },
+        methods: {
+          GetTheWeather : getTheWeather
+        }
+      })
+  
+      function getTheWeather(){
+        console.log(this.location)
+        fetch("/getWeather/"+this.location)
+        .then((response) => {
+          return response.json()
+        }) 
+        .then((data) => { 
+          console.log(data)
+        })
+      }
+    </script>
+</html>
