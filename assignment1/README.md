@@ -1,29 +1,5 @@
-# assignment1
+# Assignment 1
 
-## Project setup
-```
-npm install
-```
+The goal of this assignment was to develop a simple internet application to allow the user to input the city they were planning on going to so that they would receive a weather forecast for the following 5 days. 
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Languages/Frameworks Used: Javascript, HTML, Vue.js.
