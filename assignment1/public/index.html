@@ -5,35 +5,150 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>assignment1</title>
+    <title>Forecast Finder</title>
+    <style>
+      table {
+        width: 50%;
+        text-align: center;
+        border-collapse: collapse;
+      }
+      td,th {
+        border: 1px solid;
+      }
+    </style>
   </head>
   <body>
+    <h1>Forecast Finder</h1>
     <div id="app">
       <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
-      <input placeholder="Search Location" v-model="location"><br>
-      <button v-on:click="GetTheWeather">Get Weather</button>
+      <input v-model="location" placeholder="Search Location" v-on:keyup.enter="GetTheForecast"><br>
+      <button id="search" v-on:click="GetTheForecast">Get Forecast</button>
+      <h2>Showing travel advice for {{location}}</h2>
     </div>
+    <h3>Advice for Travelling:</h3>
+    <p id="umbrella"></p>
+    <p id="packing"></p>
+    <h3>5 Day Forecast</h3>
+    <table id="forecast" style="width: 50%" >
+    </table>
   </body>
+
   <script>
-      var app = new Vue({
-        el: '#app',
-        data: {
-          location : '' 
-        },
-        methods: {
-          GetTheWeather : getTheWeather
-        }
-      })
-  
-      function getTheWeather(){
-        console.log(this.location)
-        fetch("/getWeather/"+this.location)
-        .then((response) => {
-          return response.json()
-        }) 
-        .then((data) => { 
-          console.log(data)
-        })
+    var app = new Vue({
+      el: '#app',
+      data: {
+        location : '' 
+      },
+      methods: {
+        GetTheForecast : getTheForecast
       }
+    })
+
+    function getTheForecast() {
+      fetch("/getForecast/"+this.location)
+      .then((response) => {
+        return response.json();
+      }) 
+      .then((data) => { 
+        console.log(data);
+        let results = getDetails(data);
+        travelGuide(results);
+        makeTable(results);
+        // console.log(results)
+      })
+    }
+
+    function getDetails(data) {
+      let results = {};
+      for (var i in data['list']) {
+        let date = data['list'][i]['dt_txt'].substring(0,10);
+        if (!results[date]) {
+          results[date] = [];
+        }
+      }
+      for (var d in results) {
+        let dataResults = findKeys(data, d);
+        results[d]['raining'] = dataResults[0];
+        results[d]['temp'] = dataResults[1];
+        results[d]['wind'] = dataResults[2];
+        results[d]['rainfall'] = dataResults[3];
+      }
+      return results;
+    }
+
+    function findKeys(data, date) {
+      let raining = false;
+      let temp = 0;
+      let windSpeed = 0;
+      let rainfall = 0;
+      let results = [];
+      for (var i in data['list']) {
+        if (data['list'][i]['dt_txt'].substring(0,10) === date) {
+          let temperature = data['list'][i]['main']['temp'];
+          if (temperature > temp) {
+            temp = temperature;
+          }
+          let wind = data['list'][i]['wind']['speed'];
+          if (wind > windSpeed) {
+            windSpeed = wind;
+          } 
+          if (data['list'][i]['rain']) {
+            raining = true;
+            let rain = data['list'][i]['rain']['3h'];
+            if (rain > rainfall) {
+              rainfall = rain;
+            }
+          }
+        }
+      }
+      results[0] = raining;
+      results[1] = (temp - 273.15).toFixed(2);
+      results[2] = windSpeed;
+      results[3] = rainfall;
+      return results;
+    }
+
+    function makeTable(results) {
+      var table = document.getElementById('forecast');
+      var t = "<tr>";
+      t += "<th>" + '' + "</th>" + "<th>" + 'Temperature (°C)' + "</th>" + "<th>" + 'Wind Speed (m/s)' + "</th>" + "<th>" + 'Rainfall (mm)' + "</th>";
+      table.innerHTML += t;
+      for (var i in results) {
+        var tr = "<tr>";
+        tr += "<td>" + i + "</td>" + "<td>" + results[i].temp + "</td>" + "<td>" + results[i].wind + "</td>" + "<td>" + results[i].rainfall + "</td></tr>";
+        table.innerHTML += tr;
+      }
+    }
+
+    function travelGuide(results) {
+      let temp = 0;
+      let length = size(results);
+      for (var i in results) {
+        if (results[i]['raining']){
+          document.getElementById('umbrella').textContent = 'It would be advisable to bring an umbrella with you!';
+        }
+        temp += Number(results[i]['temp']);
+      }
+      temp = temp / length;
+      let sentence = 'You should pack for ';
+        if (temp >= -10 && temp <= 10) {
+          sentence += 'cold weather!';
+        } else if (temp > 10 && temp <= 20) {
+          sentence += 'warm weather!';
+        } else if (temp > 20) {
+          sentence += 'hot weather!';
+        }
+        document.getElementById('packing').textContent = sentence;
+    }
+
+    function size(results) {
+      var size = 0;
+      for (var i in results) {
+          if (results.hasOwnProperty(i)) {
+            size++;
+          } 
+      }
+      return size;
+    };
     </script>
 </html>
