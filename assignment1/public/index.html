@@ -6,16 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>Forecast Finder</title>
-    <style>
-      table {
-        width: 50%;
-        text-align: center;
-        border-collapse: collapse;
-      }
-      td,th {
-        border: 1px solid;
-      }
-    </style>
+    <link rel="stylesheet" href = "https://dl.dropboxusercontent.com/s/ugvh912noj0i6ov/sinead.css?dl=0"></link>
   </head>
   <body>
     <h1>Forecast Finder</h1>
@@ -34,6 +25,8 @@
   </body>
 
   <script>
+    // The Vue code. The location taken from input above is stored in the 'location' variable. The getTheForecast() method is
+    // called when either the button is clicked or the user presses enter after entering a location into the input.
     var app = new Vue({
       el: '#app',
       data: {
@@ -44,13 +37,17 @@
       }
     })
 
+    // This function calls the server-side API call with the location from input. If the returned value is an error message, i.e
+    // the city isn't recognised, an alert will pop up and if the user clicks ok, the page will be reset, otherwise they can 
+    // edit their previously entered location.
+    // If the location entered is valid, the weather forecast data for the next 5 days will be returned and from here, the program
+    // will extract the data needed, update the umbrella and packing warnings using these results and generate the table.
     function getTheForecast() {
       fetch("/getForecast/"+this.location)
       .then((response) => {
         return response.json();
       }) 
       .then((data) => { 
-        console.log(data)
         if (data['cod'] !== '200') {
           if(window.confirm('City name not recognised.')) {
             window.location.reload();
@@ -63,9 +60,10 @@
       })
     }
 
-    function reset() {
-    }
-
+    // This method looks for duplicate dates in the returned data from the API and adds one of each date to the new object
+    // results. Then for each date in results, the findKeys function is called to find the rainfall, wind speed, temperature
+    // and whether it is raining or not for each day. The returned list from this function is then used to populate the 
+    // results object accordingly.
     function getDetails(data) {
       let results = {};
       for (var i in data['list']) {
@@ -84,6 +82,14 @@
       return results;
     }
 
+    // This function is used to find the needed data for the weather app.
+    // First we find the elements in the data for the date passed to the function. Once we have found these 
+    // elements, the maximum temperature is found from all records for that day. Similarly, the maximum wind speed
+    // is found. (I chose to use the maximum as the night time values were bringing the average down and making 
+    // inaccurate readings). For the rain, I check for the presence of a 'rain' element. If this element exists at
+    // any point in the day, then the raining variable is marked to true. For the rainfall, if there is a 'rain' element
+    // and a duration element for that rain, the rainfall is added to the cumulative sum. The total rainfall for the day 
+    // is then returned.
     function findKeys(data, date) {
       let raining = false;
       let temp = 0;
@@ -102,24 +108,26 @@
           } 
           if (data['list'][i]['rain']) {
             raining = true;
-            let rain = data['list'][i]['rain']['3h'];
-            rainfall += rain;
+            if (data['list'][i]['rain']['3h']) {
+              let rain = data['list'][i]['rain']['3h'];
+              rainfall += rain;
+            }
           }
         }
       }
-
       temp = parseFloat(temp)
       results.push(raining);
       results.push((temp - 273.15).toFixed(2));
       results.push(windSpeed);
-      results.push(rainfall.toFixed(3));
+      results.push(rainfall.toFixed(3) ? rainfall.toFixed(3) : 0);
       return results;
     }
 
+    // This function simply builds the table element with the correct data.
     function makeTable(results) {
       var table = document.getElementById('forecast');
       var th = "<tr>";
-      th += "<th>" + '' + "</th>" + "<th>" + 'Temperature (°C)' + "</th>" + "<th>" + 'Wind Speed (m/s)' + "</th>" + "<th>" + 'Total Rainfall (mm)' + "</th>";
+      th += "<th>" + '' + "</th>" + "<th>" + 'Max Temperature (°C)' + "</th>" + "<th>" + 'Max Wind Speed (m/s)' + "</th>" + "<th>" + 'Total Rainfall (mm)' + "</th>";
       table.innerHTML += th;
       for (var i in results) {
         var tr = "<tr>";
@@ -128,14 +136,17 @@
       }
     }
 
+    // This function updates the travel guidance. If it is raining at any point over the 5 days, the user will be advised to bring an
+    // umbrella. 
+    // Depending on the average maximum temperature of the 5 days, the user will be advised as to what type of weather to pack for.
     function travelGuide(results) {
-      let temp = 0;
+      let temp = 0.0;
       let length = size(results);
       for (var i in results) {
         if (results[i]['raining']){
           document.getElementById('umbrella').textContent = 'It would be advisable to bring an umbrella with you!';
         }
-        temp += Number(results[i]['temp']);
+        temp += parseFloat(results[i]['temp']);
       }
       temp = temp / length;
       let sentence = 'You should pack for ';
@@ -149,6 +160,7 @@
         document.getElementById('packing').textContent = sentence;
     }
 
+    // This function calculates the size of the results object.
     function size(results) {
       var size = 0;
       for (var i in results) {
