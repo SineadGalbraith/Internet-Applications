@@ -50,11 +50,9 @@
         return response.json();
       }) 
       .then((data) => { 
-        console.log(data);
         let results = getDetails(data);
         travelGuide(results);
         makeTable(results);
-        // console.log(results)
       })
     }
 
@@ -68,10 +66,10 @@
       }
       for (var d in results) {
         let dataResults = findKeys(data, d);
-        results[d]['raining'] = dataResults[0];
-        results[d]['temp'] = dataResults[1];
-        results[d]['wind'] = dataResults[2];
-        results[d]['rainfall'] = dataResults[3];
+        results[d]['rainfall'] = dataResults.pop();
+        results[d]['wind'] = dataResults.pop();
+        results[d]['temp'] = dataResults.pop();
+        results[d]['raining'] = dataResults.pop();
       }
       return results;
     }
@@ -101,18 +99,18 @@
           }
         }
       }
-      results[0] = raining;
-      results[1] = (temp - 273.15).toFixed(2);
-      results[2] = windSpeed;
-      results[3] = rainfall;
+      results.push(raining);
+      results.push((temp - 273.15).toFixed(2));
+      results.push(windSpeed);
+      results.push(rainfall);
       return results;
     }
 
     function makeTable(results) {
       var table = document.getElementById('forecast');
-      var t = "<tr>";
-      t += "<th>" + '' + "</th>" + "<th>" + 'Temperature (°C)' + "</th>" + "<th>" + 'Wind Speed (m/s)' + "</th>" + "<th>" + 'Rainfall (mm)' + "</th>";
-      table.innerHTML += t;
+      var th = "<tr>";
+      th += "<th>" + '' + "</th>" + "<th>" + 'Temperature (°C)' + "</th>" + "<th>" + 'Wind Speed (m/s)' + "</th>" + "<th>" + 'Rainfall (mm)' + "</th>";
+      table.innerHTML += th;
       for (var i in results) {
         var tr = "<tr>";
         tr += "<td>" + i + "</td>" + "<td>" + results[i].temp + "</td>" + "<td>" + results[i].wind + "</td>" + "<td>" + results[i].rainfall + "</td></tr>";
