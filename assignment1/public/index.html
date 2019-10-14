@@ -50,7 +50,7 @@
         return response.json();
       }) 
       .then((data) => { 
-        console.log(data);
+        console.log(data)
         if (data['cod'] !== '200') {
           if(window.confirm('City name not recognised.')) {
             window.location.reload();
@@ -107,6 +107,8 @@
           }
         }
       }
+
+      temp = parseFloat(temp)
       results.push(raining);
       results.push((temp - 273.15).toFixed(2));
       results.push(windSpeed);
