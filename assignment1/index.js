@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const server = app.listen(3000);
+app.listen(3000);
 app.use(express.static('public'));
 const fetch = require("node-fetch");
 const api = '83ed0a936b1c720ba5289204836966c2';

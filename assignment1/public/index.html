@@ -21,7 +21,7 @@
     <h1>Forecast Finder</h1>
     <div id="app">
       <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
-      <input v-model="location" placeholder="Search Location" v-on:keyup.enter="GetTheForecast"><br>
+      <input id="input" v-model="location" placeholder="Search Location" v-on:keyup.enter="GetTheForecast"><br>
       <button id="search" v-on:click="GetTheForecast">Get Forecast</button>
       <h2>Showing travel advice for {{location}}</h2>
     </div>
@@ -50,10 +50,20 @@
         return response.json();
       }) 
       .then((data) => { 
-        let results = getDetails(data);
-        travelGuide(results);
-        makeTable(results);
+        console.log(data);
+        if (data['cod'] !== '200') {
+          if(window.confirm('City name not recognised.')) {
+            window.location.reload();
+          }
+        } else {
+          let results = getDetails(data);
+          travelGuide(results);
+          makeTable(results);
+        }
       })
+    }
+
+    function reset() {
     }
 
     function getDetails(data) {
@@ -93,23 +103,21 @@
           if (data['list'][i]['rain']) {
             raining = true;
             let rain = data['list'][i]['rain']['3h'];
-            if (rain > rainfall) {
-              rainfall = rain;
-            }
+            rainfall += rain;
           }
         }
       }
       results.push(raining);
       results.push((temp - 273.15).toFixed(2));
       results.push(windSpeed);
-      results.push(rainfall);
+      results.push(rainfall.toFixed(3));
       return results;
     }
 
     function makeTable(results) {
       var table = document.getElementById('forecast');
       var th = "<tr>";
-      th += "<th>" + '' + "</th>" + "<th>" + 'Temperature (°C)' + "</th>" + "<th>" + 'Wind Speed (m/s)' + "</th>" + "<th>" + 'Rainfall (mm)' + "</th>";
+      th += "<th>" + '' + "</th>" + "<th>" + 'Temperature (°C)' + "</th>" + "<th>" + 'Wind Speed (m/s)' + "</th>" + "<th>" + 'Total Rainfall (mm)' + "</th>";
       table.innerHTML += th;
       for (var i in results) {
         var tr = "<tr>";
