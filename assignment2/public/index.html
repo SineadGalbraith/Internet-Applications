@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>Assignment 2</title>
+    <link rel="stylesheet" href = "https://dl.dropboxusercontent.com/s/ugvh912noj0i6ov/sinead.css?dl=0"></link>
+  </head>
+  <body>
+    <div id="app">
+      <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+      <button id="create" v-on:click="CreateTable"> Create Database</button><br>
+      <input id="input" v-model="title" placeholder="Query Movie Title">
+      <input id="input" v-model="year" placeholder="Query Movie Year">
+      <button id="query" v-on:click="QueryDatabase">Query Database</button><br>
+      <button id="destroy" v-on:click="DestroyTable">Destroy Database</button>
+      <h2>Querying {{title}} from {{year}}. Results: </h2>
+      <table id="movie" style="width: 50%" ></table>
+    </div>
+  </body>
+
+  <script>
+  //line 13 v-on:keyup.enter="GetTheForecast">
+  //line 14 v-on:click="GetTheForecast"
+  var app = new Vue({
+      el: '#app',
+      data: {
+        year : '', 
+        title : ''
+      },
+      methods: {
+        CreateTable : createTable,
+        QueryDatabase : queryTable,
+        DestroyTable : destroyTable
+      }
+    })
+    
+    function createTable() {
+      fetch("/create")
+      .then((response) => {
+        return response.json();
+      }) 
+      .then((data) => { 
+        console.log(data);
+        window.location.reload();
+      })
+    }
+
+    function queryTable() {
+      fetch("/search/"+this.title+"/"+this.year)
+      .then((response) => {
+        return response.json();
+      }) 
+      .then((data) => { 
+        makeTable(data);
+      })
+    }
+
+    function destroyTable() {
+      fetch("/destroy")
+      .then((response) => {
+        return response.json();
+      }) 
+      .then((data) => { 
+        console.log(data);
+        window.location.reload();
+      })
+    }
+
+    function makeTable(data) {
+      var table = document.getElementById('movie');
+      var th = "<tr>";
+      th += "<th>" + 'Year' + "</th>" + "<th>" + 'Title' + "</th>";
+      table.innerHTML += th;
+      for (var i in data) {
+        var tr = "<tr>";
+        tr += "<td>" + data[i]["year"] + "</td>" + "<td>" + data[i]["title"] + "</td>";
+        table.innerHTML += tr;
+      }
+    }
+  </script>
