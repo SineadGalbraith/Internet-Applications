@@ -22,8 +22,6 @@
   </body>
 
   <script>
-  //line 13 v-on:keyup.enter="GetTheForecast">
-  //line 14 v-on:click="GetTheForecast"
   var app = new Vue({
       el: '#app',
       data: {
@@ -37,6 +35,8 @@
       }
     })
     
+    // This function is called when the Create Database button is clicked. This function fetches the data
+    // from the server side at /create which creates and populates the table.
     function createTable() {
       fetch("/create")
       .then((response) => {
@@ -48,6 +48,8 @@
       })
     }
 
+    // This function is called when the Query Database button is clicked. Using the two user input paramaters
+    // (title and year) the respective movies are returned. A table is then made to display the movies returned.
     function queryTable() {
       fetch("/search/"+this.title+"/"+this.year)
       .then((response) => {
@@ -58,6 +60,7 @@
       })
     }
 
+    // This function is called when the Destory Database button is clicked. It deletes the table.
     function destroyTable() {
       fetch("/destroy")
       .then((response) => {
@@ -69,6 +72,8 @@
       })
     }
 
+    // This function makes a table for the returned movie information. A new row is added to the table for every
+    // movie in the dataset returned.
     function makeTable(data) {
       var table = document.getElementById('movie');
       var th = "<tr>";

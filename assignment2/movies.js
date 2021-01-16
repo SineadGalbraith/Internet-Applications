@@ -13,7 +13,6 @@
  * specific language governing permissions and limitations under the License.
 */
 
-//java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
 const express = require('express');
 const app = express();
 app.listen(3000);
@@ -26,13 +25,16 @@ var isActive = false;
 var movies;
 
 AWS.config.update({
-  region: "eu-west-1",
-  endpoint: "http://localhost:8000"
+  region: "eu-west-1"
 });
 
 var dynamodb = new AWS.DynamoDB();
 var docClient = new AWS.DynamoDB.DocumentClient();
 
+// This function populates the database. Once the table has been created and the data has been retrieved from the 
+// bucket, a boolean variable is set to true and this function is called. The data returned from the bucket is stored
+// in the global "movies" variable and it is iterated over and the respective data is pulled out and used to 
+// populate the database.
 function populate(){
     console.log("Populating database.")
     movies.forEach(function(movie){
@@ -54,6 +56,7 @@ function populate(){
     console.log("Data added.");
 }
 
+// The parameters for creating the table.
 var params = {
     TableName : "Movies",
     KeySchema: [       
@@ -70,11 +73,16 @@ var params = {
     }
 };
 
+// The bucket details.
 var details = { 
     Bucket: "csu44000assignment2",
     Key: "moviedata.json"
 }
 
+// When the create button is clicked on the client side, this URL will be fetched. Here the table is created and 
+// the data is pulled from the bucket. Using a boolean variable which is initially set to false, once the data 
+// from the bucket is returned, the variable is set to true, the relevant data is parsed and stored in global 
+// variable movies and the populate function is called.
 app.get("/create", (request, response) => {
     dynamodb.createTable(params, function(err, data) {
         if (err) {
@@ -85,7 +93,6 @@ app.get("/create", (request, response) => {
                 if (err) {
                     console.log('Error', err);
                 } else {
-                    // console.log(JSON.parse(data.Body));
                     isActive = true;
                     if(isActive) {
                         movies = JSON.parse(data.Body);
@@ -97,6 +104,11 @@ app.get("/create", (request, response) => {
     });
 });
 
+// When the query button is clicked on the client side, this function will be called. To search, you need to use the 
+// title (or partial title (the query searches for any films that begin with the user input)) and year of the film 
+// you would like to find. The parameters from the query are then set (using the user input from the client side) and
+// the query is called. I then use an array to store the returned results. Once all of the results have been 
+// returned and stored, they are then pushed to the client side.
 app.get("/search/:title/:year", (request, response) => {
     let year = parseInt(request.params.year);
     var queryParams = {
@@ -124,10 +136,12 @@ app.get("/search/:title/:year", (request, response) => {
     });
 })
 
+// The parameter for deleting a table.
 var delParams = {
     TableName : "Movies"
 };
 
+// The delete function used to delete the table.
 app.get("/destroy", (request, response) => {
     dynamodb.deleteTable(delParams, function(err, data) {
         if (err) {
