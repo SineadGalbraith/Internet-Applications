@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
-app.listen(3000);
+port = 3000;
+app.listen(port);
+console.log('Server started on port: ' + port);
 app.use(express.static('public'));
 const fetch = require("node-fetch");
-const api = '83ed0a936b1c720ba5289204836966c2';
+const api = // enter API Key;
 
 // The code below shows the server side of my web app. 
 // app.get("/getForecast/:location") will request the API call following in the fetch statement. The :location is 
