@@ -47,6 +47,22 @@ Using the client, the user should see the following buttons:
 
 (Styling was not required for this assignment).
 
+- On Initial Startup:  
+<p align="center">
+  <img src="https://github.com/SineadGalbraith/Internet-Applications/blob/master/Assignment%202/images/InitialStartup.PNG" width="550" height="175">
+</p>
+
+- Query Results for movies containing the word 'The' in 2013:
+<p align="center">
+  <img src="https://github.com/SineadGalbraith/Internet-Applications/blob/master/Assignment%202/images/The2013Query.PNG" width="500" height="550">
+</p>
+
+Languages/Frameworks Used: Javascript, HTML, Vue.js.
+
+### Assignment 3 & Lab 3
+(Lab 3 Folder)
+
+The objective of this lab was to create a function that maintains a to-do-list, consisting of a list of simple things.
 
 ## Labs
 
@@ -57,5 +73,4 @@ The objective of this lab was to write a simple countdown program, in Javascript
 The objective of this lab was to gain some basic experience with Cloud Computing Tools. 
 This lab did not require any code.
 
-### Lab 3
-The objective of this lab was to create a function that maintains a to-do-list, consisting of a list of simple things.
+
