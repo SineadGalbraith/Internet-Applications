@@ -1,0 +1,19 @@
+<html>
+    <body>
+        <p id="countdown"></p>
+        <script>
+            function countdown() {
+                setTimeout(function() { console.log()})
+            }
+        </script>
+        <script>
+            // Part 1: 4-7
+            for (let i = 35; i >= 0; i--) {
+                let el = document.getElementById('countdown');
+                let newEl = document.createElement("p");
+                newEl.textContent = "Countdown: " + i;
+                el.appendChild(newEl);
+            }   
+        </script>
+    </body>
+</html>
