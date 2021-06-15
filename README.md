@@ -15,4 +15,4 @@ The objective of this lab was to gain some basic experience with Cloud Computing
 This lab did not require any code.
 
 ### Lab 3
-The objective of this lab was to develop a web API using a single AWS Lambda function that will maintain a to-do-list consisting of a list of simple things.
+The objective of this lab was to create a function that maintains a to-do-list, consisting of a list of simple things.
