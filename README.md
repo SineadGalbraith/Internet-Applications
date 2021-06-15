@@ -1,6 +1,6 @@
 # Internet-Applications
 
-Labs and Assignments for the CSU44000 - Internet Applications Module @ TCD.
+Coding Labs and Assignments for the CSU44000 - Internet Applications Module @ TCD.
 
 ## Assignments
 
@@ -59,18 +59,12 @@ Using the client, the user should see the following buttons:
 
 Languages/Frameworks Used: Javascript, HTML, Vue.js.
 
-### Assignment 3 & Lab 3
-(Lab 3 Folder)
-
-The objective of this lab was to create a function that maintains a to-do-list, consisting of a list of simple things.
-
 ## Labs
 
 ### Lab 1
 The objective of this lab was to write a simple countdown program, in Javascript, using NodeJS and the Browser.
 
-### Lab 2
-The objective of this lab was to gain some basic experience with Cloud Computing Tools. 
-This lab did not require any code.
+### Lab 3 & Assignment 3
+(Lab 3 Folder)
 
-
+The objective of this lab was to create a function that maintains a to-do-list, consisting of a list of simple things.
