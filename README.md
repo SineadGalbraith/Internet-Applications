@@ -12,12 +12,23 @@ The user should also be able to see further details including:
 - Advise on whether to pack for cold weather (temperature range: -10...+10), warm weather (temperature range: +10...+20) or hot weather (temperature range: 20+).
 - A summary table showing the Temperature, Wind Speed and Rainfall Level for the next 5 days.
 
-Languages/Frameworks Used: Javascript, HTML, Vue.js.
-
-(Styling was not required for this assignment so only basic styling is used).
+*To run program:* `npm start`  
 
 #### End Result
-*To run program:* `npm start`  
+
+(Styling was not required for this assignment).
+
+- On Initial Startup:  
+<p align="center">
+  <img src="https://github.com/SineadGalbraith/Internet-Applications/blob/master/Assignment%201/images/InitialStartup.PNG" width="300" height="250">
+</p>
+
+- Query Results for 'Newry':
+<p align="center">
+  <img src="https://github.com/SineadGalbraith/Internet-Applications/blob/master/Assignment%201/images/CityQuery.PNG" width="700" height="350">
+</p>
+
+Languages/Frameworks Used: Javascript, HTML, Vue.js.
 
 
 ### Assignment 2
