@@ -16,6 +16,12 @@ Languages/Frameworks Used: Javascript, HTML, Vue.js.
 
 (Styling was not required for this assignment so only basic styling is used).
 
+#### End Result
+*To run program:* `npm start`  
+
+
+### Assignment 2
+
 ## Labs
 
 ### Lab 1
