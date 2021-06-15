@@ -32,6 +32,21 @@ Languages/Frameworks Used: Javascript, HTML, Vue.js.
 
 
 ### Assignment 2
+The objective of this assignment was to write a simple client (VueJS) that interacts with a server (NodeJS) which in turn interacts with a Cloud-Based Database (using AWS DynamoDB) and an Object stored in the Object-Store.  
+
+A JSON file containing movie data was provided.
+
+Using the client, the user should see the following buttons:
+- Create Database - causes the server to make a table in a DynamoDB database which is then populated using the raw data from the object.
+- Query Database (with input for movie name) - causes the server to find and display all the movies that begin with the text that the user has entered.
+- Destroy Database - causes the database table to be deleted.
+
+*To run program:* `npm start`  
+
+#### End Result
+
+(Styling was not required for this assignment).
+
 
 ## Labs
 
