@@ -4,6 +4,17 @@ Labs and Assignments for the CSU44000 - Internet Applications Module @ TCD.
 
 ## Assignments
 
+### Assignment 1
+The objective of this assignment was to develop a simple application to allow the user to input a city and receive a 5 day weather forecast for that city using the OpenWeatherMap API.  
+
+The user should also be able to see further details including:
+- Advise on whether or not to pack an umbrella (depending on if rain is forecast over the following 5-day period).
+- Advise on whether to pack for cold weather (temperature range: -10...+10), warm weather (temperature range: +10...+20) or hot weather (temperature range: 20+).
+- A summary table showing the Temperature, Wind Speed and Rainfall Level for the next 5 days.
+
+Languages/Frameworks Used: Javascript, HTML, Vue.js.
+
+(Styling was not required for this assignment so only basic styling is used).
 
 ## Labs
 
